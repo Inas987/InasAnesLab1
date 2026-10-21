@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fitness App - Trening Simulator</title>
+</head>
+<body>
+<nav>
+    <a href="/exercises">Vježbe</a> |
+    <a href="/trainers">Treneri</a> |
+    <a href="/workout">Trening Simulator</a>
+</nav>
+<hr>
+<h2>Simulator Treninga</h2>
+
+<form th:action="@{/workout/start}" method="post">
+    <label>Odaberi Vježbu za trening:</label>
+    <select name="exerciseId">
+        <option th:each="e : ${exercises}"
+                th:value="${e.id}"
+                th:selected="${e.id == selectedId}"
+                th:text="${e.name + ' (Treninga: ' + e.completedSessions + ')'}">
+        </option>
+    </select>
+    <button type="submit">Započni Trening</button>
+</form>
+
+<div th:if="${result != null}">
+    <hr>
+    <h3>Rezultat Treninga</h3>
+    <p><strong>Ishod:</strong> <span th:text="${result.outcome}"></span></p>
+    <p><strong>Ciljani Intenzitet:</strong> <span th:text="${result.targetIntensity}"></span></p>
+    <p><strong>Osvojeno Bodova:</strong> <span th:text="${result.gainedPoints}"></span></p>
+    <p><strong>Novi Broj Završenih Treninga:</strong> <span th:text="${result.newSessionLevel}"></span></p>
+</div>
+</body>
+</html>
