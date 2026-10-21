@@ -74,7 +74,7 @@ Tokom izrade ove aplikacije i rješavanja problema pri konfiguraciji korišteni 
 
 1. Klonirajte repozitorij:
    ```bash
-   git clone [https://github.com/TVOJ_USERNAME/InasAnesLab1.git](https://github.com/TVOJ_USERNAME/InasAnesLab1.git)
+   git clone https://github.com/Inas987/InasAnesLab1
 
 
    Slike aplikacije :https://postimg.cc/gallery/bsPvJpN
