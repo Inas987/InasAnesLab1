@@ -1,0 +1,32 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Uredi Opremu</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { width: 300px; }
+        input { width: 100%; margin-bottom: 10px; padding: 6px; box-sizing: border-box; }
+        button { padding: 8px 12px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<h2>Uredi Opremu (Update)</h2>
+<form th:action="@{/equipment/update/{id}(id=${equipment.id})}" method="post">
+    <label>Naziv opreme:</label>
+    <input type="text" name="name" th:value="${equipment.name}" required>
+
+    <label>Kategorija:</label>
+    <input type="text" name="category" th:value="${equipment.category}" required>
+
+    <button type="submit">Sačuvaj Izmjene</button>
+</form>
+
+<br>
+<a href="/equipment">Odustani</a>
+
+</body>
+</html>

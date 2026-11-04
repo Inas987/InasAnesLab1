@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Upravljanje Opremom</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 60%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        form { margin-top: 15px; width: 300px; }
+        input { width: 100%; margin-bottom: 8px; padding: 6px; box-sizing: border-box; }
+        button { padding: 8px 12px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+        .btn-edit { background-color: #ffc107; color: black; padding: 4px 8px; text-decoration: none; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<h2>Lista Opreme</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Naziv</th>
+        <th>Kategorija</th>
+        <th>Akcija</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${equipments != null}" th:each="eq : ${equipments}">
+        <td th:text="${eq.id}">1</td>
+        <td th:text="${eq.name}">Teg</td>
+        <td th:text="${eq.category}">Kardio</td>
+        <td>
+            <a th:href="@{/equipment/edit/{id}(id=${eq.id})}" class="btn-edit">Uredi</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Dodaj Novu Opremu</h3>
+<form th:action="@{/equipment/add}" method="post">
+    <input type="text" name="name" placeholder="Naziv opreme" required>
+    <input type="text" name="category" placeholder="Kategorija" required>
+    <button type="submit">Dodaj</button>
+</form>
+
+<br><br>
+<a href="/api/equipment" target="_blank">Pogledaj REST JSON API</a>
+
+</body>
+</html>
