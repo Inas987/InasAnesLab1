@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+        <html xmlns:th="http://www.thymeleaf.org">
+        <head>
+        <meta charset="UTF-8">
+        <title>Fitness App - Vježbe</title>
+</head>
+<body>
+<nav>
+    <a href="/exercises">Vježbe</a> |
+    <a href="/trainers">Treneri</a> |
+    <a href="/workout">Trening Simulator</a>
+</nav>
+<hr>
+<h2>Lista Vježbi</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Naziv Vježbe</th>
+        <th>Osnovne Kalorije</th>
+        <th>Stamina</th>
+        <th>Bodovi</th>
+        <th>Ukupno Kalorija</th>
+        <th>Ukupno Stamina</th>
+        <th>Broj Treninga</th>
+        <th>Dodijeljeni Treneri</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="e : ${exercises}">
+        <td th:text="${e.id}">1</td>
+        <td th:text="${e.name}">Čučnjevi</td>
+        <td th:text="${e.caloriesBurned}">50</td>
+        <td th:text="${e.stamina}">5</td>
+        <td th:text="${e.points}">10</td>
+        <td th:text="${e.totalCaloriesBurned()}">80</td>
+        <td th:text="${e.totalStamina()}">5</td>
+        <td th:text="${e.completedSessions}">0</td>
+        <td>
+            <ul>
+                <li th:each="t : ${e.trainers}" th:text="${t.name}">Trener</li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

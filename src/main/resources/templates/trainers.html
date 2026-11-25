@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fitness App - Treneri</title>
+</head>
+<body>
+<nav>
+    <a href="/exercises">Vježbe</a> |
+    <a href="/trainers">Treneri</a> |
+    <a href="/workout">Trening Simulator</a>
+</nav>
+<hr>
+<h2>Dostupni Treneri</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Ime Trenera</th>
+        <th>+ Kalorije Bonus</th>
+        <th>+ Stamina Bonus</th>
+        <th>Angažovanje (3 Bodova)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t : ${trainers}">
+        <td th:text="${t.id}">1</td>
+        <td th:text="${t.name}">Trener Marko</td>
+        <td th:text="${t.calorieBoost}">+30</td>
+        <td th:text="${t.staminaBoost}">+0</td>
+        <td>
+            <form th:action="@{/trainers/hire}" method="post">
+                <input type="hidden" name="trainerId" th:value="${t.id}"/>
+                <select name="exerciseId">
+                    <option th:each="e : ${exercises}"
+                            th:value="${e.id}"
+                            th:text="${e.name + ' (Bodova: ' + e.points + ')'}">
+                    </option>
+                </select>
+                <button type="submit">Angažuj</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
