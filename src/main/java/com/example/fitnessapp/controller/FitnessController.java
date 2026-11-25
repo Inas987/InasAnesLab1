@@ -1,19 +1,26 @@
 package com.example.fitnessapp.controller;
+
+import com.example.fitnessapp.model.Exercise;
+import com.example.fitnessapp.model.Trainer;
+import com.example.fitnessapp.repository.ExerciseRepository;
+import com.example.fitnessapp.repository.TrainerRepository;
+import com.example.fitnessapp.service.WorkoutService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.example.fitnessapp.data.FitnessData;
-import com.example.fitnessapp.model.Exercise;
-import com.example.fitnessapp.service.WorkoutService;
 
 @Controller
 public class FitnessController {
 
-    private final FitnessData data;
+    private final ExerciseRepository exerciseRepository;
+    private final TrainerRepository trainerRepository;
     private final WorkoutService workoutService;
 
-    public FitnessController(FitnessData data, WorkoutService workoutService) {
-        this.data = data;
+    public FitnessController(ExerciseRepository exerciseRepository,
+                             TrainerRepository trainerRepository,
+                             WorkoutService workoutService) {
+        this.exerciseRepository = exerciseRepository;
+        this.trainerRepository = trainerRepository;
         this.workoutService = workoutService;
     }
 
@@ -24,39 +31,47 @@ public class FitnessController {
 
     @GetMapping("/exercises")
     public String exercises(Model model) {
-        model.addAttribute("exercises", data.findAllExercises());
+        model.addAttribute("exercises", exerciseRepository.findAll());
         return "exercises";
     }
 
     @GetMapping("/trainers")
     public String trainers(Model model) {
-        model.addAttribute("trainers", data.findAllTools());
-        model.addAttribute("exercises", data.findAllExercises());
+        model.addAttribute("trainers", trainerRepository.findAll());
+        model.addAttribute("exercises", exerciseRepository.findAll());
         return "trainers";
     }
 
     @PostMapping("/trainers/hire")
     public String hireTrainer(@RequestParam Long exerciseId, @RequestParam Long trainerId) {
-        data.hireTrainer(exerciseId, trainerId, 3);
+        Exercise e = exerciseRepository.findById(exerciseId).orElse(null);
+        Trainer t = trainerRepository.findById(trainerId).orElse(null);
+
+        if (e != null && t != null && e.canAddTrainer() && e.getPoints() >= 3) {
+            e.setPoints(e.getPoints() - 3);
+            e.addTrainer(t);
+            exerciseRepository.save(e);
+        }
         return "redirect:/trainers";
     }
 
     @GetMapping("/workout")
     public String workout(Model model, @RequestParam(required = false) Long exerciseId) {
-        model.addAttribute("exercises", data.findAllExercises());
+        model.addAttribute("exercises", exerciseRepository.findAll());
         model.addAttribute("selectedId", exerciseId);
         return "workout";
     }
 
     @PostMapping("/workout/start")
     public String startWorkout(@RequestParam Long exerciseId, Model model) {
-        Exercise e = data.findExercise(exerciseId);
-        WorkoutService.Result result = workoutService.executeWorkout(e);
-
-        model.addAttribute("exercises", data.findAllExercises());
+        Exercise e = exerciseRepository.findById(exerciseId).orElse(null);
+        if (e != null) {
+            WorkoutService.Result result = workoutService.executeWorkout(e);
+            model.addAttribute("exercise", e);
+            model.addAttribute("result", result);
+        }
+        model.addAttribute("exercises", exerciseRepository.findAll());
         model.addAttribute("selectedId", exerciseId);
-        model.addAttribute("exercise", e);
-        model.addAttribute("result", result);
         return "workout";
     }
 }

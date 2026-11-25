@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fitness App - Oprema</title>
+</head>
+<body>
+<nav>
+    <a href="/exercises">Vježbe</a> |
+    <a href="/trainers">Treneri</a> |
+    <a href="/workout">Trening Simulator</a> |
+    <a href="/equipment">Oprema</a> |
+    <a href="/api/equipment" target="_blank">REST API (JSON)</a>
+</nav>
+<hr>
+
+<h2>Lista Opreme</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Naziv Opreme</th>
+        <th>Kategorija</th>
+        <th>Težina (kg)</th>
+        <th>Povezana Vježba</th>
+        <th>Akcije</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${equipmentList}">
+        <td th:text="${item.id}">1</td>
+        <td th:text="${item.name}">Olimpijska šipka</td>
+        <td th:text="${item.category}">Tegovi</td>
+        <td th:text="${item.weightKg}">20.0</td>
+        <td th:text="${item.exercise != null ? item.exercise.name : 'Nije dodijeljeno'}">Čučnjevi</td>
+        <td>
+            <a th:href="@{/equipment/edit/{id}(id=${item.id})}">Uredi</a>
+            <form th:action="@{/equipment/delete/{id}(id=${item.id})}" method="post" style="display:inline;">
+                <button type="submit">Obriši</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+<h3>Dodaj Novu Opremu</h3>
+<form th:action="@{/equipment/add}" th:object="${newEquipment}" method="post">
+    <p>
+        <label>Naziv opreme:</label>
+        <input type="text" th:field="*{name}" required/>
+    </p>
+    <p>
+        <label>Kategorija:</label>
+        <input type="text" th:field="*{category}" required/>
+    </p>
+    <p>
+        <label>Težina (kg):</label>
+        <input type="number" step="0.5" th:field="*{weightKg}" required/>
+    </p>
+    <p>
+        <label>Povezana vježba:</label>
+        <select name="exerciseId" required>
+            <option th:each="ex : ${exercises}"
+                    th:value="${ex.id}"
+                    th:text="${ex.name}">
+            </option>
+        </select>
+    </p>
+    <button type="submit">Dodaj Opremu</button>
+</form>
+</body>
+</html>

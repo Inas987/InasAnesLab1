@@ -1,14 +1,19 @@
 package com.example.fitnessapp.service;
 
-
-import org.springframework.stereotype.Service;
 import com.example.fitnessapp.model.Exercise;
+import com.example.fitnessapp.repository.ExerciseRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
 @Service
 public class WorkoutService {
     private final Random rnd = new Random();
+    private final ExerciseRepository exerciseRepository;
+
+    public WorkoutService(ExerciseRepository exerciseRepository) {
+        this.exerciseRepository = exerciseRepository;
+    }
 
     public Result executeWorkout(Exercise e) {
         int sessionLevel = e.getCompletedSessions();
@@ -34,6 +39,7 @@ public class WorkoutService {
         }
 
         e.setCompletedSessions(sessionLevel + 1);
+        exerciseRepository.save(e);
         return new Result(outcome, targetIntensity, gainedPoints, e.getCompletedSessions());
     }
 

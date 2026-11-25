@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fitness App - Uredi Opremu</title>
+</head>
+<body>
+<nav>
+    <a href="/exercises">Vježbe</a> |
+    <a href="/trainers">Treneri</a> |
+    <a href="/workout">Trening Simulator</a> |
+    <a href="/equipment">Oprema</a> |
+    <a href="/api/equipment" target="_blank">REST API (JSON)</a>
+</nav>
+<hr>
+
+<h2>Uredi Opremu</h2>
+<form th:action="@{/equipment/update/{id}(id=${equipment.id})}" th:object="${equipment}" method="post">
+    <p>
+        <label>Naziv opreme:</label>
+        <input type="text" th:field="*{name}" required/>
+    </p>
+    <p>
+        <label>Kategorija:</label>
+        <input type="text" th:field="*{category}" required/>
+    </p>
+    <p>
+        <label>Težina (kg):</label>
+        <input type="number" step="0.5" th:field="*{weightKg}" required/>
+    </p>
+    <p>
+        <label>Povezana vježba:</label>
+        <select name="exerciseId" required>
+            <option th:each="ex : ${exercises}"
+                    th:value="${ex.id}"
+                    th:selected="${equipment.exercise != null && ex.id == equipment.exercise.id}"
+                    th:text="${ex.name}">
+            </option>
+        </select>
+    </p>
+    <button type="submit">Sačuvaj Izmjene</button>
+    <a href="/equipment">Odustani</a>
+</form>
+</body>
+</html>

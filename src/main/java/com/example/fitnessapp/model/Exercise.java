@@ -1,15 +1,28 @@
 package com.example.fitnessapp.model;
 
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "exercises")
 public class Exercise {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private int caloriesBurned;
     private int stamina;
     private int points;
     private int completedSessions;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "exercise_trainers",
+            joinColumns = @JoinColumn(name = "exercise_id"),
+            inverseJoinColumns = @JoinColumn(name = "trainer_id")
+    )
     private List<Trainer> trainers = new ArrayList<>();
 
     public Exercise() {}
